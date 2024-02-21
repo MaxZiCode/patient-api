@@ -11,6 +11,8 @@ namespace PatientApi.Actions.Create
 {
     [ApiController]
     [Route(Routes.Patient)]
+    [Tags("Patient")]
+    [Produces("application/json")]
     public class CreatePatientController : ControllerBase
     {
         private readonly IPatientRepository PATIENT_REPOSITORY;
@@ -22,7 +24,11 @@ namespace PatientApi.Actions.Create
             MAPPER = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Creates a specific Patient.
+        /// </summary>
         [HttpPost]
+        [ProducesResponseType(typeof(ReadPatientDto), 201)]
         public async Task<IActionResult> CreatePatientAsync(CreatePatientDto createDto)
         {
             Patient patient = MAPPER.Map<Patient>(createDto);

@@ -11,6 +11,8 @@ namespace PatientApi.Actions.Update
 {
     [ApiController]
     [Route(Routes.Patient)]
+    [Tags("Patient")]
+    [Produces("application/json")]
     public class UpdatePatientController : ControllerBase
     {
         private readonly IPatientRepository PATIENT_REPOSITORY;
@@ -22,7 +24,12 @@ namespace PatientApi.Actions.Update
             MAPPER = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Updates a specific Patient.
+        /// </summary>
         [HttpPut("{id}")]
+        [ProducesResponseType(typeof(ReadPatientDto), 200)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdatePatientAsync([FromRoute] Guid id, UpdatePatientDto updateDto)
         {
             Patient? patient = await PATIENT_REPOSITORY.GetAsync(id);

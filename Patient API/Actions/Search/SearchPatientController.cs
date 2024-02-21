@@ -13,6 +13,8 @@ namespace PatientApi.Actions.Search
 {
     [ApiController]
     [Route(Routes.Patient)]
+    [Tags("Patient")]
+    [Produces("application/json")]
     public class SearchPatientController : ControllerBase
     {
         private readonly IPatientRepository PATIENT_REPOSITORY;
@@ -24,7 +26,11 @@ namespace PatientApi.Actions.Search
             MAPPER = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Searches Patients by birth date.
+        /// </summary>
         [HttpGet]
+        [ProducesResponseType(typeof(List<ReadPatientDto>), 200)]
         public async Task<IActionResult> SearchPatientsAsync([FromQuery(Name = "date")][Required] string[] dateParams, DateTime? currentTime = null)
         {
             currentTime ??= DateTime.Now;

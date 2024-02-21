@@ -1,5 +1,7 @@
 ﻿using PatientApi.Constants;
 
+using System.ComponentModel.DataAnnotations;
+
 namespace PatientApi.Actions.Create
 {
     public class CreatePatientDto
@@ -8,6 +10,7 @@ namespace PatientApi.Actions.Create
 
         public Gender? Gender { get; set; }
 
+        [Required]
         public DateTime BirthDate { get; set; }
 
         public bool? Active { get; set; }

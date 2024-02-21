@@ -10,6 +10,8 @@ namespace PatientApi.Actions.Read
 {
     [ApiController]
     [Route(Routes.Patient)]
+    [Tags("Patient")]
+    [Produces("application/json")]
     public class ReadPatientController : ControllerBase
     {
         private readonly IPatientRepository PATIENT_REPOSITORY;
@@ -21,7 +23,12 @@ namespace PatientApi.Actions.Read
             MAPPER = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
+        /// <summary>
+        /// Reads a specific Patient.
+        /// </summary>
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(ReadPatientDto), 200)]
+        [ProducesResponseType(404)]
         public async Task<IActionResult> ReadPatientAsync([FromRoute] Guid id)
         {
             Patient? patient = await PATIENT_REPOSITORY.GetAsync(id);

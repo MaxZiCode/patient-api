@@ -1,8 +1,12 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 using PatientApi.Database.Contexts;
 using PatientApi.Database.Repositories;
 
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +21,16 @@ builder.Services.AddControllers().AddJsonOptions(opts =>
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomOperationIds(apiDesc =>
+    {
+        return apiDesc.TryGetMethodInfo(out MethodInfo methodInfo) ? methodInfo.Name : null;
+    });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+});
 
 builder.Services.AddDbContext<PatientContext>(options =>
   options.UseSqlServer(builder.Configuration.GetConnectionString("PatientContext")));

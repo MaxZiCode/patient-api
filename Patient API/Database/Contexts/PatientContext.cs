@@ -17,7 +17,7 @@ namespace PatientApi.Database.Contexts
             var patientModelBuilder = modelBuilder.Entity<Patient>();
             patientModelBuilder.ToTable("Patient").HasKey(p => p.Id);
             patientModelBuilder.Property(p => p.Gender).HasConversion<string>();
-            patientModelBuilder.HasOne(p => p.PatientName).WithOne();
+            patientModelBuilder.HasOne(p => p.PatientName).WithOne().OnDelete(DeleteBehavior.Cascade);
 
             var patientNameModelBuilder = modelBuilder.Entity<PatientName>();
             patientNameModelBuilder.ToTable("PatientName").HasKey(pn => pn.Id);

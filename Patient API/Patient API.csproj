@@ -7,6 +7,7 @@
     <RootNamespace>PatientApi</RootNamespace>
     <UserSecretsId>bdbbb5f5-e902-4243-8959-07dd8042f405</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>

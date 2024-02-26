@@ -37,20 +37,20 @@ namespace PatientApi.Database.Repositories
             await PATIENT_CONTEXT.SaveChangesAsync();
         }
 
-        public async Task<IReadOnlyCollection<Patient>> SearchByBirthDate(DateTime? dateEqual = null, DateTime? dateFrom = null, DateTime? dateTo = null, params DateTime[] datesNotEqual)
+        public async Task<IReadOnlyCollection<Patient>> SearchByBirthDate(DateSearchCriteria dateSearchCriteria)
         {
             IQueryable<Patient> query = PATIENT_CONTEXT.Patients.AsNoTracking().Include(p => p.PatientName);
-            if (dateEqual != null)
-                query = query.Where(p => p.BirthDate == dateEqual);
+            foreach (Period equalPeriod in dateSearchCriteria.EqualPeriods)
+                query = query.Where(pat => equalPeriod.DateFrom <= pat.BirthDate && pat.BirthDate <= equalPeriod.DateTo);
 
-            if (dateFrom != null)
-                query = query.Where(p => p.BirthDate >= dateFrom);
+            foreach (Period notEqualPeriod in dateSearchCriteria.NotEquialPeriods)
+                query = query.Where(pat => pat.BirthDate < notEqualPeriod.DateFrom || notEqualPeriod.DateTo < pat.BirthDate);
 
-            if (dateTo != null)
-                query = query.Where(p => p.BirthDate <= dateTo);
+            foreach (DateTime fromDate in dateSearchCriteria.FromDates)
+                query = query.Where(pat => fromDate <= pat.BirthDate);
 
-            if (datesNotEqual.Length > 0)
-                query = query.Where(p => !datesNotEqual.Contains(p.BirthDate));
+            foreach (DateTime toDate in dateSearchCriteria.ToDates)
+                query = query.Where(pat => pat.BirthDate <= toDate);
 
             return await query.ToListAsync();
         }

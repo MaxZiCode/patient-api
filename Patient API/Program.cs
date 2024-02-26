@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 using PatientApi.Database.Contexts;
 using PatientApi.Database.Repositories;
+using PatientApi.Services;
 
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -38,6 +38,7 @@ builder.Services.AddTransient<IPatientRepository, PatientRepository>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddSingleton<IDateSearchCriteriaFactory, DateSearchCriteriaFactory>();
 
 var app = builder.Build();
 
